@@ -1,0 +1,105 @@
+.section {
+  width: 100%;
+  padding: 70px 0;
+  background: #0d0d0d;
+  color: white;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  width: 88%;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+/* Base card style */
+.card {
+  background: #111;
+  padding: 30px 25px;
+  border-radius: 18px;
+  flex: 1 1 400px;
+  min-width: 280px;
+  max-width: 500px;
+  border: 1px solid #1a1a1a;
+  box-shadow: 0 0 20px rgba(0, 225, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 25px rgba(0, 225, 255, 0.35);
+}
+
+.card h3 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #00e1ff;
+  margin-bottom: 25px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 25px;
+}
+
+.listItem {
+  font-size: 1rem;
+  color: #cccccc;
+  margin-bottom: 12px;
+  padding-left: 15px;
+  position: relative;
+}
+
+.listItem::before {
+  content: "•";
+  color: #06ffb2;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* Buttons */
+.studentBtn, .contractorBtn {
+  padding: 12px 30px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.studentBtn {
+  background: #06ffb2;
+  color: #000;
+  box-shadow: 0 4px 12px rgba(6, 255, 178, 0.4);
+}
+
+.studentBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(6, 255, 178, 0.6);
+}
+
+.contractorBtn {
+  background: #00e1ff;
+  color: #000;
+  box-shadow: 0 4px 12px rgba(0, 225, 255, 0.4);
+}
+
+.contractorBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 225, 255, 0.6);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+    gap: 25px;
+  }
+}

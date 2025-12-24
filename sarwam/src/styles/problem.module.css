@@ -1,0 +1,99 @@
+.section {
+  width: 100%;
+  padding: 70px 0;
+  background: #0b0b0c;
+  color: white;
+  text-align: center;
+}
+
+.heading {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #00e1ff;
+  margin-bottom: 40px;
+}
+
+/* GRID same as solutions section */
+.grid {
+  width: 88%;
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 35px;
+}
+
+/* CARD same as solution section */
+.card {
+  background: #111;
+  padding: 28px 22px;
+  border-radius: 18px;
+  transition: 0.3s ease;
+  box-shadow: 0 0 18px rgba(0, 225, 255, 0.24);
+  border: 1px solid #1a1a1a;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* CARD hover */
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 25px rgba(0, 225, 255, 0.5);
+}
+
+/* top icon */
+.iconMain {
+  width: 55px;
+  height: 55px;
+  margin-bottom: 18px;
+}
+
+/* Title same color like solutions */
+.cardTitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #06ffb2;
+  margin-bottom: 18px;
+}
+
+/* List */
+.list {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  list-style: none;
+}
+
+.listItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+  color: #cccccc;
+  font-size: 1rem;
+}
+
+/* green bullet like solution icons */
+.bullet {
+  width: 10px;
+  height: 10px;
+  background: #06ffb2;
+  border-radius: 50%;
+  margin-top: 5px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,166 @@
+.pageBackground {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #0b0b0d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.signupContainer {
+  max-width: 600px;
+  width: 100%;
+  padding: 40px 30px;
+  border-radius: 20px;
+  background: rgba(15, 15, 15, 0.6);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(0, 225, 255, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 225, 255, 0.2);
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  color: #00e1ff;
+  margin-bottom: 30px;
+  text-shadow: 0 0 8px rgba(0, 225, 255, 0.5);
+}
+
+.steps {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.stepCircle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #ccc;
+  backdrop-filter: blur(10px);
+  transition: 0.3s ease;
+}
+
+.activeStep {
+  border: 2px solid #00e1ff;
+}
+
+.completedStep {
+  background-color: #06ffb2;
+  color: #000;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input[type="text"],
+input[type="password"],
+select,
+input[type="file"] {
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: rgba(20, 20, 20, 0.6);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  transition: 0.3s ease;
+}
+
+input:focus,
+select:focus,
+input[type="file"]:focus {
+  border: 1px solid #00e1ff;
+  box-shadow: 0 0 10px rgba(0, 225, 255, 0.3);
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 1rem;
+}
+
+.reviewTitle {
+  font-size: 1.5rem;
+  color: #00e1ff;
+  margin-bottom: 15px;
+}
+
+.reviewCard {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid rgba(6, 255, 178, 0.2);
+  box-shadow: 0 5px 15px rgba(6, 255, 178, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+.prevBtn,
+.nextBtn,
+.submitBtn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: 0.3s ease;
+}
+
+.prevBtn {
+  background: rgba(100, 100, 100, 0.6);
+  color: #fff;
+  backdrop-filter: blur(10px);
+}
+
+.nextBtn {
+  background: #00e1ff;
+  color: #000;
+}
+
+.submitBtn {
+  background: #06ffb2;
+  color: #000;
+}
+
+.prevBtn:hover {
+  background: rgba(100, 100, 100, 0.8);
+}
+
+.nextBtn:hover {
+  box-shadow: 0 5px 15px rgba(0, 225, 255, 0.5);
+}
+
+.submitBtn:hover {
+  box-shadow: 0 5px 15px rgba(6, 255, 178, 0.5);
+}
+
+@media (max-width: 480px) {
+  .buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
