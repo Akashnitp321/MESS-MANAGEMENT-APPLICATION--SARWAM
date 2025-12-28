@@ -5,13 +5,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: clamp(16px, 4vw, 32px);
+  box-sizing: border-box;
 }
 
 .signupContainer {
-  max-width: 600px;
-  width: 100%;
-  padding: 40px 30px;
+  width: min(620px, 100%);
+  padding: clamp(26px, 4vw, 40px) clamp(20px, 4vw, 32px);
   border-radius: 20px;
   background: rgba(15, 15, 15, 0.6);
   backdrop-filter: blur(15px);
@@ -35,6 +35,7 @@
   justify-content: center;
   gap: 15px;
   margin-bottom: 25px;
+  flex-wrap: wrap;
 }
 
 .stepCircle {
@@ -68,8 +69,13 @@
 
 input[type="text"],
 input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
 select,
 input[type="file"] {
+  width: 100%;
+  box-sizing: border-box;
   padding: 12px 15px;
   border-radius: 10px;
   border: none;
@@ -86,6 +92,85 @@ select:focus,
 input[type="file"]:focus {
   border: 1px solid #00e1ff;
   box-shadow: 0 0 10px rgba(0, 225, 255, 0.3);
+}
+
+.inputField {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: rgba(20, 20, 20, 0.6);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  transition: 0.3s ease;
+}
+
+.inputField:focus {
+  border: 1px solid #00e1ff;
+  box-shadow: 0 0 10px rgba(0, 225, 255, 0.3);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.signupBtn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  background: #06ffb2;
+  color: #000;
+  transition: 0.3s ease;
+}
+
+.signupBtn:hover {
+  box-shadow: 0 5px 15px rgba(6, 255, 178, 0.5);
+}
+
+.signupBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ffffff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loginRedirect {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  color: #ccc;
+}
+
+.loginRedirect span {
+  color: #00e1ff;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 label {
@@ -115,6 +200,8 @@ label {
 .buttons {
   display: flex;
   justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
   margin-top: 25px;
 }
 
@@ -159,8 +246,31 @@ label {
 }
 
 @media (max-width: 480px) {
-  .buttons {
-    flex-direction: column;
-    gap: 10px;
-  }
+  .buttons { flex-direction: column; align-items: stretch; }
+  .title { font-size: 1.6rem; }
+  .signupContainer { border-radius: 16px; }
+  .steps { gap: 10px; }
+  .stepCircle { width: 28px; height: 28px; }
+}
+
+/* Loader styles */
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #00e1ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

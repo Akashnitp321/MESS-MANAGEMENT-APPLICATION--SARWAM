@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
 const StudentSchema = new mongoose.Schema({
   email:{ type: String, required: true },
@@ -15,4 +15,4 @@ const StudentSchema = new mongoose.Schema({
 
 
 
-module.exports = mongoose.model('Student', StudentSchema);
+export default mongoose.model('Student', StudentSchema);

@@ -1,6 +1,9 @@
-const jwt = require('jsonwebtoken');
-const Student = require('../models/student');
-require('dotenv').config();
+import jwt from 'jsonwebtoken';
+import Student from '../models/Student.js';
+import Contractor from '../models/Contractor.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const protect = async (req, res, next) => {
   let token;
@@ -11,11 +14,28 @@ const protect = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.student = await Student.findById(decoded.id).select("-password");
+
+    // Try to find user as student first
+    let user = await Student.findById(decoded.id).select("-password");
+
+    // If not found as student, try as contractor
+    if (!user) {
+      user = await Contractor.findById(decoded.id).select("-password");
+      if (user) {
+        req.contractor = user;
+      }
+    } else {
+      req.student = user;
+    }
+
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
     next();
   } catch (err) {
     res.status(401).json({ message: "Token invalid" });
   }
 };
 
-module.exports = protect;
+export default protect;

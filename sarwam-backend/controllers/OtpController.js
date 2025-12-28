@@ -1,4 +1,4 @@
-import Otp from "../models/otp.js";
+import Otp from "../models/Otp.js";
 import transporter from "../utils/mailer.js";
 import express from "express";
 

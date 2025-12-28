@@ -15,19 +15,18 @@
 
 /* GRID same as solutions section */
 .grid {
-  width: 88%;
+  width: 92%;
   max-width: 1200px;
   margin: 0 auto;
-  
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 35px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
 }
 
 /* CARD same as solution section */
 .card {
   background: #111;
-  padding: 28px 22px;
+  padding: 26px 20px;
   border-radius: 18px;
   transition: 0.3s ease;
   box-shadow: 0 0 18px rgba(0, 225, 255, 0.24);
@@ -87,13 +86,10 @@
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .grid { gap: 20px; }
 }
 
 @media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+  .section { padding: 56px 0; }
+  .heading { font-size: 2.2rem; }
 }

@@ -3,19 +3,23 @@ import styles from "../styles/Login.module.css";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-export default function Login() {
+export default function ContractorLogin() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    rollNo: "",
+    contractorId: "",
     password: "",
-    role: "Student",
+    hostel: "Aryabhatta Hostel",
     remember: false,
   });
   const [loading, setLoading] = useState(false);
 
-  const onSignupClick = () => {
-    navigate("/signup");
-  };
+  const hostels = [
+    "Aryabhatta Hostel",
+    "Kadambini Hostel",
+    "Brahmaputra Hostel",
+    "Ganga Hostel",
+    "Kautilya Hostel",
+  ];
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -26,22 +30,23 @@ export default function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
 
-    const { rollNo, password } = formData;
-    if (!rollNo.trim() || !password.trim()) {
-      toast.error("Roll Number and Password are required");
+    const { contractorId, password } = formData;
+    if (!contractorId.trim() || !password.trim()) {
+      toast.error("Contractor ID and Password are required");
       return;
     }
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3000/api/auth/student-login", {
+      const res = await fetch("http://localhost:3000/api/auth/contractor-login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          rollNo: rollNo.trim(),
+          contractorId: contractorId.trim(),
           password: password,
+          hostel: formData.hostel,
         }),
       });
 
@@ -50,7 +55,9 @@ export default function Login() {
       if (res.ok && data.token) {
         toast.success("Login successful!");
         localStorage.setItem("token", data.token);
-        setTimeout(() => navigate("/student-dashboard"), 3000);
+        localStorage.setItem("role", "contractor");
+        localStorage.setItem("hostel", formData.hostel);
+        setTimeout(() => navigate("/contractor-dashboard"), 3000);
       } else {
         toast.error(data.error || "Login failed");
       }
@@ -66,13 +73,13 @@ export default function Login() {
     <div className={styles.pageBackground}>
       <Toaster position="top-right" />
       <div className={styles.loginContainer}>
-        <h2 className={styles.title}>Student Login</h2>
+        <h2 className={styles.title}>Contractor Login</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
           <input
             type="text"
-            name="rollNo"
-            placeholder="Roll Number"
-            value={formData.rollNo}
+            name="contractorId"
+            placeholder="Contractor ID"
+            value={formData.contractorId}
             onChange={handleChange}
             required
           />
@@ -84,6 +91,18 @@ export default function Login() {
             onChange={handleChange}
             required
           />
+          <select
+            name="hostel"
+            value={formData.hostel}
+            onChange={handleChange}
+            required
+          >
+            {hostels.map((hostel, index) => (
+              <option key={index} value={hostel}>
+                {hostel}
+              </option>
+            ))}
+          </select>
           <label className={styles.checkboxLabel}>
             <input
               type="checkbox"
@@ -105,11 +124,11 @@ export default function Login() {
           </button>
           <p className={styles.signupRedirect}>
             Don't have an account?{" "}
-            <span onClick={onSignupClick}>Signup</span>
+            <span onClick={() => navigate("/contractor-signup")}>Signup</span>
           </p>
           <p className={styles.signupRedirect}>
             Forgot Password?{" "}
-            <span onClick={onSignupClick}>Click Here</span>
+            <span onClick={() => navigate("/forgot-password")}>Click Here</span>
           </p>
         </form>
       </div>

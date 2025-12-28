@@ -10,6 +10,8 @@ import paymentRoutes from './Routes/PaymentRoutes.js'; // <-- new
 import MenuRoutes from './Routes/MenuRoutes.js'
 import StudentInfoRoutes from './Routes/StudentInfoRoutes.js'
 import LeaveRoutes from './Routes/LeaveRoutes.js'
+import contractorAuthRoutes from './Routes/contractorAuth.js'
+import contractorRoutes from './Routes/contractorRoutes.js'
 
 import connectToDB from "./connections/db.js";
 
@@ -48,6 +50,8 @@ app.use('/api/payment', paymentRoutes); // <-- new
 app.use('/api',MenuRoutes)
 app.use('/api',StudentInfoRoutes)
 app.use('/api',LeaveRoutes)
+app.use('/api/auth', contractorAuthRoutes)
+app.use('/api/contractor', contractorRoutes)
 
 // return JSON 404 for unmatched routes
 app.use((req, res) => {

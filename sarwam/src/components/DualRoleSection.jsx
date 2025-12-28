@@ -1,7 +1,9 @@
 import React from "react";
 import styles from "../styles/DualRoleSection.module.css";
+import { useNavigate } from "react-router-dom";
 
 export default function DualRoleSection() {
+  const navigate = useNavigate();
   const studentsFeatures = [
     "Track monthly/yearly expenses",
     "View coupon usage",
@@ -29,7 +31,7 @@ export default function DualRoleSection() {
               <li key={idx} className={styles.listItem}>{feature}</li>
             ))}
           </ul>
-          <button className={styles.studentBtn}>Student Login →</button>
+          <button className={styles.studentBtn} onClick={() => navigate("/login")}>Student Login →</button>
         </div>
 
         {/* Right Side: Contractor */}
@@ -40,7 +42,7 @@ export default function DualRoleSection() {
               <li key={idx} className={styles.listItem}>{feature}</li>
             ))}
           </ul>
-          <button className={styles.contractorBtn}>Contractor Login →</button>
+          <button className={styles.contractorBtn} onClick={() => navigate("/contractor-login")}>Contractor Login →</button>
         </div>
       </div>
     </section>

@@ -5,13 +5,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: clamp(16px, 4vw, 32px);
+  box-sizing: border-box;
 }
 
 .loginContainer {
-  max-width: 450px;
-  width: 100%;
-  padding: 40px 30px;
+  width: min(460px, 100%);
+  padding: clamp(26px, 4vw, 40px) clamp(20px, 4vw, 30px);
   border-radius: 20px;
   background: rgba(15, 15, 15, 0.6);
   backdrop-filter: blur(15px);
@@ -38,6 +38,8 @@
 input[type="text"],
 input[type="password"],
 select {
+  width: 100%;
+  box-sizing: border-box;
   padding: 12px 15px;
   border-radius: 10px;
   border: none;
@@ -90,4 +92,32 @@ select:focus {
   color: #00e1ff;
   cursor: pointer;
   text-decoration: underline;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ffffff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 520px) {
+  .title { font-size: 1.6rem; }
+  .loginContainer { border-radius: 16px; }
+  .form { gap: 12px; }
+  .checkboxLabel { align-items: flex-start; }
+  .signupRedirect { font-size: 0.85rem; }
 }

@@ -9,8 +9,8 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 40px;
-  width: 88%;
+  gap: 32px;
+  width: 92%;
   max-width: 1200px;
   margin: 0 auto;
   flex-wrap: wrap;
@@ -100,6 +100,11 @@
 @media (max-width: 900px) {
   .container {
     flex-direction: column;
-    gap: 25px;
+    gap: 20px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 720px;
   }
 }

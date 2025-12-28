@@ -1,16 +1,18 @@
 .hero {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background: #0d0d0d;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 40px 80px;
+  justify-content: center;
+  gap: 40px;
+  padding: clamp(24px, 4vw, 64px) clamp(18px, 5vw, 80px);
   box-sizing: border-box;
 }
 
 .left {
-  width: 50%;
+  flex: 1 1 420px;
+  max-width: 560px;
   color: white;
 }
 
@@ -88,13 +90,73 @@
 }
 
 .right {
-  width: 50%;
+  flex: 1 1 380px;
   display: flex;
   justify-content: center;
 }
 
 .heroImage {
   width: 100%;
+  max-width: 520px;
   border-radius: 20px;
   box-shadow: 0 0 25px rgba(0, 225, 255, 0.4);
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 32px 20px 48px;
+  }
+
+  .left, .right {
+    width: 100%;
+    max-width: 640px;
+  }
+
+  .title {
+    font-size: 42px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+  }
+
+  .buttonsRow {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .heroImage {
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    gap: 24px;
+    padding: 28px 16px 40px;
+  }
+
+  .title {
+    font-size: 34px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .buttonsRow {
+    gap: 12px;
+  }
+
+  .studentBtn, .contractorBtn, .exploreBtn {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .heroImage {
+    max-width: 100%;
+  }
 }

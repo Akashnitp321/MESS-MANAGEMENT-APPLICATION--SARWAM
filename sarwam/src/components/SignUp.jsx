@@ -17,6 +17,7 @@ export default function Signup() {
     idCardPhotoLink: "",
     email: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const hostels = [
     "Aryabhatta Hostel",
@@ -35,6 +36,7 @@ export default function Signup() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     // Trim inputs and prepare payload
     const payload = {
@@ -51,12 +53,14 @@ export default function Signup() {
     // Basic client-side validation
     if (!payload.email || !payload.rollNo || !payload.password) {
       toast.error("Email, Roll No and Password are required");
+      setLoading(false);
       return;
     }
     // simple email regex
     const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRe.test(payload.email)) {
       toast.error("Please enter a valid email address");
+      setLoading(false);
       return;
     }
 
@@ -78,6 +82,7 @@ export default function Signup() {
         // show specific server feedback if available
         const msg = data.error || (data.details ? JSON.stringify(data.details) : "Signup failed");
         toast.error(msg);
+        setLoading(false);
         return; // stop if signup failed
       }
 
@@ -95,6 +100,7 @@ export default function Signup() {
 
       if (!otpRes.ok) {
         toast.error(otpData.error || "Failed to send OTP");
+        setLoading(false);
         return;
       }
 
@@ -102,6 +108,7 @@ export default function Signup() {
       navigate("/verify-otp", { state: { email: payload.email } });
     } catch (err) {
       toast.error("Network error: " + err.message);
+      setLoading(false);
     }
   };
 
@@ -280,8 +287,15 @@ export default function Signup() {
               </button>
             )}
             {step === 3 && (
-              <button type="submit" className={styles.submitBtn}>
-                Submit
+              <button type="submit" className={styles.submitBtn} disabled={loading}>
+                {loading ? (
+                  <div className={styles.loader}>
+                    <div className={styles.spinner}></div>
+                    Signing Up...
+                  </div>
+                ) : (
+                  "Submit"
+                )}
               </button>
             )}
           </div>

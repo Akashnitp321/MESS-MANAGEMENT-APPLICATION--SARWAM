@@ -1,7 +1,6 @@
-const Student = require('../models/student');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const express = require('express');
+import Student from '../models/Student.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 // JWT token generator — now includes rollNo
 const generateToken = (id, rollNo) => {
@@ -11,7 +10,7 @@ const generateToken = (id, rollNo) => {
 };
 
 // ----------------- SIGNUP -----------------
-exports.signup = async (req, res) => {
+export const signup = async (req, res) => {
   try {
     const { rollNo, email, fullName, instituteName, password, hostelName, passportPhotoLink, idCardPhotoLink } = req.body;
 
@@ -56,7 +55,7 @@ exports.signup = async (req, res) => {
 };
 
 // ----------------- LOGIN -----------------
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   try {
     const { rollNo, password } = req.body;
 
@@ -68,6 +67,13 @@ exports.login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, student.password);
     if (!isMatch) {
       return res.status(401).json({ error: 'Invalid roll number or password' });
+    }
+
+    // Check if student is verified
+    if (!student.isVerified) {
+      return res.status(403).json({
+        error: 'You are not verified yet. Contact Hostel Management Committee.'
+      });
     }
 
     const token = generateToken(student._id, student.rollNo);

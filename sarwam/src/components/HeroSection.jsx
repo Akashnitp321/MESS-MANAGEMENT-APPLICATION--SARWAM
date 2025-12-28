@@ -43,7 +43,7 @@ export default function HeroSection() {
 
         <div className={styles.buttonsRow}>
           <button className={styles.studentBtn} onClick={() => navigate("/login")}>Login as Student</button>
-          <button className={styles.contractorBtn}>Login as Contractor</button>
+          <button className={styles.contractorBtn} onClick={() => navigate("/contractor-login")}>Login as Contractor</button>
         </div>
 
         <button className={styles.exploreBtn}>Explore Features</button>

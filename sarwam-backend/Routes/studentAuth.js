@@ -1,10 +1,9 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const StudentAuth = require('../controllers/studentAuth');
-const protect = require('../middleware/auth');
+import { signup, login } from '../controllers/studentAuth.js';
+import protect from '../middleware/auth.js';
 
-router.post('/student-signup', StudentAuth.signup);
-router.post('/student-login', StudentAuth.login);
+router.post('/student-signup', signup);
+router.post('/student-login', login);
 
-
-module.exports = router;
+export default router;

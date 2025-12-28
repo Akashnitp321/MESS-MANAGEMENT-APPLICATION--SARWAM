@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { jwtDecode } from "jwt-decode";
 import styles from "../styles/Dashboard.module.css";
 import toast, { Toaster } from "react-hot-toast";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { FaCalendarAlt, FaFileAlt, FaPaperPlane } from 'react-icons/fa';
-import { MdRestaurantMenu, MdEventNote, MdHistory, MdChat, MdShoppingCart, MdLogout } from 'react-icons/md';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { FaCalendarAlt, FaFileAlt, FaPaperPlane, FaFilePdf } from 'react-icons/fa';
+import { MdRestaurantMenu, MdEventNote, MdHistory, MdChat, MdShoppingCart, MdLogout, MdMenu, MdClose } from 'react-icons/md';
 import io from 'socket.io-client';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 const days = [
   "Sunday",
   "Monday",
@@ -23,6 +25,7 @@ const token = localStorage.getItem("token");
 export default function StudentDashboard() {
   const [view, setView] = useState("today");
   const [collapsed, setCollapsed] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [menuLoading, setMenuLoading] = useState(true);
 
   const [menu, setMenu] = useState({
@@ -399,53 +402,200 @@ export default function StudentDashboard() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, view]);
 
+  const changeView = (nextView) => {
+    setView(nextView);
+    setCollapsed(false);
+    setIsMobileNavOpen(false);
+  };
+
+  // PDF Export Functions
+  const exportPurchaseHistoryPDF = () => {
+    const doc = new jsPDF();
+    
+    // Add title
+    doc.setFontSize(18);
+    doc.setTextColor(0, 225, 255);
+    doc.text('Purchase History Report', 14, 20);
+    
+    // Add student info
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Student: ${name}`, 14, 30);
+    doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 35);
+    
+    // Prepare table data
+    const tableData = purchaseHistory.map(p => [
+      new Date(p.paymentTime).toLocaleDateString(),
+      p.items.map(item => `${item.name} x${item.quantity}`).join(', '),
+      `₹${p.totalAmount}`
+    ]);
+    
+    // Add table
+    autoTable(doc, {
+      head: [['Date', 'Items', 'Total Amount']],
+      body: tableData,
+      startY: 42,
+      theme: 'grid',
+      headStyles: { fillColor: [0, 225, 255], textColor: [0, 0, 0] },
+      styles: { fontSize: 9 }
+    });
+    
+    // Add total
+    const total = purchaseHistory.reduce((sum, p) => sum + p.totalAmount, 0);
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.text(`Total Spent: ₹${total}`, 14, doc.lastAutoTable.finalY + 10);
+    
+    doc.save(`Purchase_History_${name}_${new Date().toISOString().split('T')[0]}.pdf`);
+    toast.success('PDF downloaded successfully!');
+  };
+
+  const exportLeaveHistoryPDF = () => {
+    const doc = new jsPDF();
+    
+    doc.setFontSize(18);
+    doc.setTextColor(0, 225, 255);
+    doc.text('Leave Application Report', 14, 20);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Student: ${name}`, 14, 30);
+    doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 35);
+    
+    const tableData = leaveHistory.map(l => [
+      l.from,
+      l.to,
+      l.reason,
+      (l.status || 'pending').toUpperCase()
+    ]);
+    
+    autoTable(doc, {
+      head: [['From Date', 'To Date', 'Reason', 'Status']],
+      body: tableData,
+      startY: 42,
+      theme: 'grid',
+      headStyles: { fillColor: [6, 255, 178], textColor: [0, 0, 0] },
+      styles: { fontSize: 9 },
+      columnStyles: {
+        2: { cellWidth: 60 }
+      }
+    });
+    
+    doc.save(`Leave_History_${name}_${new Date().toISOString().split('T')[0]}.pdf`);
+    toast.success('PDF downloaded successfully!');
+  };
+
+  const exportMonthlyAnalyticsPDF = () => {
+    const doc = new jsPDF();
+    
+    doc.setFontSize(18);
+    doc.setTextColor(0, 225, 255);
+    doc.text('Monthly Purchase Analytics', 14, 20);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Student: ${name}`, 14, 30);
+    doc.text(`Month: ${new Date().toLocaleString('default', { month: 'long', year: 'numeric' })}`, 14, 35);
+    doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 40);
+    
+    // Add summary
+    doc.setFontSize(14);
+    doc.setTextColor(0);
+    doc.text(`Total Spent This Month: ₹${monthlyData.totalSpent}`, 14, 50);
+    
+    // Add item-wise breakdown
+    if (monthlyData.graphData && monthlyData.graphData.length > 0) {
+      const tableData = monthlyData.graphData.map(item => [
+        item.name,
+        item.quantity.toString()
+      ]);
+      
+      autoTable(doc, {
+        head: [['Item Name', 'Quantity Purchased']],
+        body: tableData,
+        startY: 58,
+        theme: 'grid',
+        headStyles: { fillColor: [6, 255, 178], textColor: [0, 0, 0] },
+        styles: { fontSize: 10 }
+      });
+    }
+    
+    // Add detailed purchases
+    if (monthlyData.purchases && monthlyData.purchases.length > 0) {
+      doc.addPage();
+      doc.setFontSize(14);
+      doc.text('Detailed Purchase List', 14, 20);
+      
+      const detailData = monthlyData.purchases.map(p => [
+        new Date(p.paymentTime).toLocaleDateString(),
+        p.items.map(i => `${i.name} (${i.quantity})`).join(', '),
+        `₹${p.totalAmount}`
+      ]);
+      
+      autoTable(doc, {
+        head: [['Date', 'Items', 'Amount']],
+        body: detailData,
+        startY: 28,
+        theme: 'grid',
+        headStyles: { fillColor: [0, 225, 255], textColor: [0, 0, 0] },
+        styles: { fontSize: 9 }
+      });
+    }
+    
+    doc.save(`Monthly_Analytics_${name}_${new Date().toISOString().split('T')[0]}.pdf`);
+    toast.success('PDF downloaded successfully!');
+  };
+
   return (
     <div className={`${styles.page} ${collapsed ? styles.collapsedPage : ""}`}>
       <Toaster position="top-right" />
       <aside
-        className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""}`}
+        className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""} ${isMobileNavOpen ? styles.sidebarOpen : ""}`}
       >
         <div className={styles.brand}>
           <div className={styles.logo}>SARWAM</div>
           <button
             className={styles.collapseBtn}
-            onClick={() => setCollapsed((c) => !c)}
+            onClick={() => {
+              if (isMobileNavOpen) return setIsMobileNavOpen(false);
+              setCollapsed((c) => !c);
+            }}
           >
-            {collapsed ? "⮞" : "⮜"}
+            {isMobileNavOpen ? <MdClose /> : collapsed ? "⮞" : "⮜"}
           </button>
         </div>
         <nav className={styles.nav}>
           <button
             className={view === "today" ? styles.active : ""}
-            onClick={() => setView("today")}
+            onClick={() => changeView("today")}
           >
             <MdRestaurantMenu />
             <span>Today Menu</span>
           </button>
           <button
             className={view === "leave" ? styles.active : ""}
-            onClick={() => setView("leave")}
+            onClick={() => changeView("leave")}
           >
             <MdEventNote />
             <span>Leave Application</span>
           </button>
           <button
             className={view === "purchase-history" ? styles.active : ""}
-            onClick={() => setView("purchase-history")}
+            onClick={() => changeView("purchase-history")}
           >
             <MdHistory />
             <span>Purchase History</span>
           </button>
           <button
             className={view === "chat" ? styles.active : ""}
-            onClick={() => setView("chat")}
+            onClick={() => changeView("chat")}
           >
             <MdChat />
             <span>Community Chat</span>
           </button>
           <button
             className={view === "purchase" ? styles.active : ""}
-            onClick={() => setView("purchase")}
+            onClick={() => changeView("purchase")}
           >
             <MdShoppingCart />
             <span>Purchase Items</span>
@@ -460,9 +610,23 @@ export default function StudentDashboard() {
           </div>
         </nav>
       </aside>
+      <div
+        className={`${styles.scrim} ${isMobileNavOpen ? styles.scrimVisible : ""}`}
+        onClick={() => setIsMobileNavOpen(false)}
+      />
 
       <main className={styles.main}>
         <header className={styles.header}>
+          <button
+            className={styles.mobileToggle}
+            onClick={() => {
+              setCollapsed(false);
+              setIsMobileNavOpen(true);
+            }}
+            aria-label="Open navigation"
+          >
+            <MdMenu />
+          </button>
           <h1>Student Dashboard</h1>
           <div className={styles.headerRight}>
             <div className={styles.welcome}>Hello, {name}</div>
@@ -596,21 +760,29 @@ export default function StudentDashboard() {
                 </form>
               </div>
               <div className={styles.panelRight}>
-                <h2>Leave History</h2>
+                <div className={styles.row}>
+                  <h2>Leave History</h2>
+                  <button className={styles.pdfBtn} onClick={exportLeaveHistoryPDF}>
+                    <FaFilePdf />
+                  </button>
+                </div>
                 <ul className={styles.list}>
-                  {leaveHistory.map((l) => (
-                    <li key={l.id}>
-                      <div>
-                        <strong>
-                          {l.from} → {l.to}
-                        </strong>{" "}
-                        <span className={styles.badge}>
-                          {l.status || "Pending"}
-                        </span>
-                      </div>
-                      <div className={styles.muted}>{l.reason}</div>
-                    </li>
-                  ))}
+                  {leaveHistory.map((l, idx) => {
+                    const statusClass = l.status === 'approved' ? styles.statusApproved : l.status === 'rejected' ? styles.statusRejected : styles.statusPending;
+                    return (
+                      <li key={l._id || idx}>
+                        <div>
+                          <strong>
+                            {l.from} → {l.to}
+                          </strong>{" "}
+                          <span className={statusClass}>
+                            {l.status || "pending"}
+                          </span>
+                        </div>
+                        <div className={styles.muted}>{l.reason}</div>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>
@@ -618,43 +790,57 @@ export default function StudentDashboard() {
 
           {view === "purchase-history" && (
             <div>
-              <h2>Monthly Purchase Overview</h2>
+              <div className={styles.row}>
+                <h2>Monthly Purchase Overview</h2>
+                <button className={styles.pdfBtn} onClick={exportMonthlyAnalyticsPDF}>
+                  <FaFilePdf /> Export Analytics PDF
+                </button>
+              </div>
               <div className={styles.row}>
                 <div>Total Spent This Month: ₹{monthlyData.totalSpent}</div>
               </div>
               <div style={{ width: '100%', height: 300, background: 'var(--card)', padding: '20px', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)' }}>
-                <BarChart width="100%" height={260} data={monthlyData.graphData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                  <XAxis dataKey="name" stroke="#e6eef6" />
-                  <YAxis stroke="#e6eef6" />
-                  <Tooltip contentStyle={{ background: 'var(--panel)', border: '1px solid rgba(110,231,183,0.2)', borderRadius: '8px' }} />
-                  <Legend />
-                  <Bar dataKey="quantity" fill="var(--accent)" radius={[4, 4, 0, 0]} animationDuration={1500} />
-                </BarChart>
+                <ResponsiveContainer width="100%" height={260}>
+                  <BarChart data={monthlyData.graphData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                    <XAxis dataKey="name" stroke="#e6eef6" />
+                    <YAxis stroke="#e6eef6" />
+                    <Tooltip contentStyle={{ background: 'var(--panel)', border: '1px solid rgba(110,231,183,0.2)', borderRadius: '8px' }} />
+                    <Legend />
+                    <Bar dataKey="quantity" fill="var(--accent)" radius={[4, 4, 0, 0]} animationDuration={1500} />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
-              <h2>Purchase History</h2>
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Items</th>
-                    <th>Total Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {purchaseHistory.map((p) => (
-                    <tr key={p._id}>
-                      <td>{new Date(p.paymentTime).toLocaleDateString()}</td>
-                      <td>
-                        {p.items.map((item, idx) => (
-                          <div key={idx}>{item.name} x{item.quantity} @ ₹{item.price}</div>
-                        ))}
-                      </td>
-                      <td>₹{p.totalAmount}</td>
+              <div className={styles.row}>
+                <h2>Purchase History</h2>
+                <button className={styles.pdfBtn} onClick={exportPurchaseHistoryPDF}>
+                  <FaFilePdf /> Export PDF
+                </button>
+              </div>
+              <div className={styles.tableWrapper}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Items</th>
+                      <th>Total Amount</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {purchaseHistory.map((p) => (
+                      <tr key={p._id}>
+                        <td>{new Date(p.paymentTime).toLocaleDateString()}</td>
+                        <td>
+                          {p.items.map((item, idx) => (
+                            <div key={idx}>{item.name} x{item.quantity} @ ₹{item.price}</div>
+                          ))}
+                        </td>
+                        <td>₹{p.totalAmount}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
 
@@ -700,34 +886,36 @@ export default function StudentDashboard() {
               <div className={styles.panel}>
                 <div className={styles.panelLeft}>
                   <h3>Selected Items</h3>
-                  <table className={styles.table}>
-                    <thead>
-                      <tr>
-                        <th>Image</th>
-                        <th>Item</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {selectedItems.map((sel, idx) => (
-                        <tr key={idx}>
-                          <td><img src={`https://via.placeholder.com/50x50?text=${encodeURIComponent(sel.item.name)}`} alt={sel.item.name} className={styles.menuImg} /></td>
-                          <td>{sel.item.name}</td>
-                          <td>
-                            <button onClick={() => updateQty(idx, -1)}>-</button>
-                            {sel.qty}
-                            <button onClick={() => updateQty(idx, 1)}>+</button>
-                          </td>
-                          <td>₹{sel.item.price}</td>
-                          <td>₹{sel.item.price * sel.qty}</td>
-                          <td><button onClick={() => removeItem(idx)}>Remove</button></td>
+                  <div className={styles.tableWrapper}>
+                    <table className={styles.table}>
+                      <thead>
+                        <tr>
+                          <th>Image</th>
+                          <th>Item</th>
+                          <th>Qty</th>
+                          <th>Price</th>
+                          <th>Total</th>
+                          <th>Action</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {selectedItems.map((sel, idx) => (
+                          <tr key={idx}>
+                            <td><img src={`https://via.placeholder.com/50x50?text=${encodeURIComponent(sel.item.name)}`} alt={sel.item.name} className={styles.menuImg} /></td>
+                            <td>{sel.item.name}</td>
+                            <td className={styles.qtyCell}>
+                              <button onClick={() => updateQty(idx, -1)} aria-label="Decrease quantity">-</button>
+                              {sel.qty}
+                              <button onClick={() => updateQty(idx, 1)} aria-label="Increase quantity">+</button>
+                            </td>
+                            <td>₹{sel.item.price}</td>
+                            <td>₹{sel.item.price * sel.qty}</td>
+                            <td><button onClick={() => removeItem(idx)}>Remove</button></td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                   <p>Total: ₹{selectedItems.reduce((sum, sel) => sum + sel.item.price * sel.qty, 0)}</p>
                   <button className={styles.primary} onClick={handlePay}>Pay Now</button>
                 </div>
