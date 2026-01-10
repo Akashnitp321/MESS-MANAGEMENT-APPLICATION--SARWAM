@@ -8,6 +8,7 @@ import { MdRestaurantMenu, MdEventNote, MdHistory, MdChat, MdShoppingCart, MdLog
 import io from 'socket.io-client';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { API_BASE_URL, SOCKET_URL } from "../config";
 const days = [
   "Sunday",
   "Monday",
@@ -67,7 +68,7 @@ export default function StudentDashboard() {
 
   // Initialize socket connection on mount
   useEffect(() => {
-    const newSocket = io('http://localhost:3004');
+    const newSocket = io(SOCKET_URL);
     setSocket(newSocket);
 
     // Cleanup on unmount
@@ -137,7 +138,7 @@ export default function StudentDashboard() {
 
     const fetchNo = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/info/me", {
+        const res = await fetch(`${API_BASE_URL}/api/info/me`, {
           method: "GET",
           headers: {
             authorization: token,
@@ -165,7 +166,7 @@ export default function StudentDashboard() {
     const fetchMenu = async () => {
       setMenuLoading(true);
       try {
-        const res = await fetch("http://localhost:3000/api/mess/today", {
+        const res = await fetch(`${API_BASE_URL}/api/mess/today`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ day: dayName }),
@@ -195,7 +196,7 @@ export default function StudentDashboard() {
           return toast.error("Login first");
         }
 
-        const res = await fetch("http://localhost:3000/api/history/me", {
+        const res = await fetch(`${API_BASE_URL}/api/history/me`, {
           method: "GET",
           headers: {
             Authorization: token, // send token here
@@ -232,7 +233,7 @@ export default function StudentDashboard() {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const res = await fetch("http://localhost:3000/api/payment/purchase-history", {
+      const res = await fetch(`${API_BASE_URL}/api/payment/purchase-history`, {
         method: "GET",
         headers: {
           Authorization: token,
@@ -254,7 +255,7 @@ export default function StudentDashboard() {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const res = await fetch("http://localhost:3000/api/payment/monthly-purchases", {
+      const res = await fetch(`${API_BASE_URL}/api/payment/monthly-purchases`, {
         method: "GET",
         headers: {
           Authorization: token,
@@ -299,7 +300,7 @@ export default function StudentDashboard() {
 
     try {
       // Send flattened payload
-      const res = await fetch("http://localhost:3000/api/submit/leave", {
+      const res = await fetch(`${API_BASE_URL}/api/submit/leave`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...leaveForm, rollNo: decoded.rollNo }),
@@ -372,7 +373,7 @@ export default function StudentDashboard() {
     }));
 
     try {
-      const res = await fetch("http://localhost:3000/api/payment/create-purchase", {
+      const res = await fetch(`${API_BASE_URL}/api/payment/create-purchase`, {
         method: "POST",
         headers: {
           Authorization: token,

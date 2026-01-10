@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import { API_BASE_URL } from '../config';
 
 export default function VerifyOtp() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function VerifyOtp() {
 
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:3000/api/otp/verify-otp', {
+      const res = await fetch(`${API_BASE_URL}/api/otp/verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim(), otp: otp.trim() }),

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import styles from "../styles/Signup.module.css";
+import { API_BASE_URL } from "../config";
 
 export default function ContractorSignup() {
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ export default function ContractorSignup() {
 
     setLoading(true);
     try {
-      const signupUrl = "http://localhost:3000/api/auth/contractor-signup";
+      const signupUrl = `${API_BASE_URL}/api/auth/contractor-signup`;
       const res = await fetch(signupUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

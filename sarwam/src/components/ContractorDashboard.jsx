@@ -8,6 +8,7 @@ import { FaFilePdf } from 'react-icons/fa';
 import io from 'socket.io-client';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { API_BASE_URL, SOCKET_URL } from "../config";
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
@@ -56,7 +57,7 @@ export default function ContractorDashboard() {
     fetchLeaves();
 
     // Initialize socket connection for chat
-    socketRef.current = io('http://localhost:3004');
+    socketRef.current = io(SOCKET_URL);
 
     socketRef.current.on('connect', () => {
       console.log('Contractor connected to chat');
@@ -219,7 +220,7 @@ export default function ContractorDashboard() {
   const fetchStudents = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:3000/api/contractor/students`, {
+      const res = await fetch(`${API_BASE_URL}/api/contractor/students`, {
         headers: { "Authorization": `Bearer ${token}` },
       });
 
@@ -242,7 +243,7 @@ export default function ContractorDashboard() {
     setAnalyticsLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:3000/api/contractor/purchase-analytics`, {
+      const res = await fetch(`${API_BASE_URL}/api/contractor/purchase-analytics`, {
         headers: { "Authorization": `Bearer ${token}` },
       });
 
@@ -265,7 +266,7 @@ export default function ContractorDashboard() {
     setLeavesLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:3000/api/contractor/leaves`, {
+      const res = await fetch(`${API_BASE_URL}/api/contractor/leaves`, {
         headers: { "Authorization": `Bearer ${token}` },
       });
 
@@ -287,7 +288,7 @@ export default function ContractorDashboard() {
     setActionLoading(prev => ({ ...prev, [studentId]: true }));
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:3000/api/contractor/approve-student/${studentId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/contractor/approve-student/${studentId}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -317,7 +318,7 @@ export default function ContractorDashboard() {
     setActionLoading(prev => ({ ...prev, [studentId]: true }));
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:3000/api/contractor/reject-student/${studentId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/contractor/reject-student/${studentId}`, {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`,

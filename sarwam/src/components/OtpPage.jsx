@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import styles from "../styles/OtpPage.module.css";
+import { API_BASE_URL } from "../config";
 
 export default function OTPPage() {
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ export default function OTPPage() {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3000/api/otp/verify-otp", {
+      const res = await fetch(`${API_BASE_URL}/api/otp/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim(), otp: enteredOtp }),
@@ -79,7 +80,7 @@ export default function OTPPage() {
     }
     setResending(true);
     try {
-      const res = await fetch("http://localhost:3000/api/otp/send-otp", {
+      const res = await fetch(`${API_BASE_URL}/api/otp/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),

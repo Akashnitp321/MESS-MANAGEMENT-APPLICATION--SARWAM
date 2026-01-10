@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import styles from "../styles/Signup.module.css";
+import { API_BASE_URL } from "../config";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ export default function Signup() {
 
     try {
       // 1️⃣ Signup API
-      const signupUrl = "http://localhost:3000/api/auth/student-signup".replace(
+      const signupUrl = `${API_BASE_URL}/api/auth/student-signup`.replace(
         /\s/g,
         ""
       );
@@ -89,7 +90,7 @@ export default function Signup() {
       toast.success("Signup successful!");
 
       // 2️⃣ Send OTP
-      const otpUrl = "http://localhost:3000/api/otp/send-otp".replace(/\s/g, '');
+      const otpUrl = `${API_BASE_URL}/api/otp/send-otp`.replace(/\s/g, '');
       const otpRes = await fetch(otpUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
