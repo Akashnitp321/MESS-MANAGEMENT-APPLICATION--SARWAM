@@ -15,20 +15,21 @@ export const sendOtp = async (req, res) => {
 
     await Otp.create({ email, otp, expiresAt });
 
-    try {
-      console.log(`Sending OTP email to ${email}...`);
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: "Your OTP Code",
-        html: `<p>Your OTP is <b>${otp}</b>. Expires in 5 minutes.</p>`
-      });
-      console.log(`✓ OTP email sent successfully to ${email}`);
-    } catch (mailErr) {
-      console.error("❌ Email send failed:", mailErr.message);
-      throw mailErr;
-    }
+    // Send email in background (don't wait)
+    transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Your OTP Code",
+      html: `<p>Your OTP is <b>${otp}</b>. Expires in 5 minutes.</p>`
+    }, (err) => {
+      if (err) {
+        console.error("❌ Email send failed:", err.message);
+      } else {
+        console.log(`✓ OTP email sent to ${email}`);
+      }
+    });
 
+    // Return success immediately (email sends in background)
     res.json({ success: true, message: "OTP sent successfully" });
   } catch (err) {
     console.error("Send OTP error:", err.message);
