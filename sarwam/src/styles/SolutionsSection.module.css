@@ -1,85 +1,73 @@
 .solutionsWrapper {
-  padding: clamp(48px, 6vw, 80px) clamp(20px, 6vw, 80px);
-  background: #0d0d0d;
-  color: white;
+  padding: clamp(56px, 7vw, 90px) clamp(20px, 6vw, 88px);
+  background: transparent;
+  color: var(--text-primary);
 }
 
 .heading {
-  font-size: 32px;
+  font-size: clamp(28px, 4vw, 42px);
   font-weight: 700;
   text-align: center;
-  color: #00e1ff;
+  color: var(--text-primary);
   margin-bottom: 10px;
 }
 
 .subHeading {
-  font-size: 18px;
-  color: #bbbbbb;
+  font-size: 17px;
+  color: var(--text-secondary);
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 34px;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-  max-width: 1100px;
+  gap: clamp(16px, 3vw, 26px);
+  max-width: 1180px;
   margin: 0 auto;
   width: 100%;
 }
 
-/* --- Card Base Style --- */
 .card {
-  background: #111111;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
   padding: 22px;
-  border-radius: 18px;
-  border: 1px solid #1f1f1f;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
   min-height: 150px;
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(10px);
 }
 
 .card h3 {
-  font-size: 20px;
-  margin-bottom: 12px;
+  font-size: 19px;
+  margin-bottom: 10px;
 }
 
 .card p {
   font-size: 15px;
-  color: #bdbdbd;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }
 
-/* --- Hover Effect --- */
 .card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 54px rgba(0, 0, 0, 0.4);
 }
 
-/* --- Student Features (Green) --- */
 .greenCard {
-  box-shadow: 0 0 20px rgba(6, 255, 178, 0.25);
-  border-left: 4px solid #06ffb2;
+  border-left: 4px solid var(--glow-green);
+  box-shadow: 0 0 0 1px rgba(93, 224, 193, 0.12), var(--card-shadow);
 }
 
-.greenCard:hover {
-  box-shadow: 0 0 25px rgba(6, 255, 178, 0.45);
-}
-
-/* --- Contractor/Admin Features (Blue) --- */
 .blueCard {
-  box-shadow: 0 0 20px rgba(0, 225, 255, 0.25);
-  border-left: 4px solid #00e1ff;
+  border-left: 4px solid var(--glow-blue);
+  box-shadow: 0 0 0 1px rgba(77, 176, 246, 0.12), var(--card-shadow);
 }
 
-.blueCard:hover {
-  box-shadow: 0 0 25px rgba(0, 225, 255, 0.45);
-}
-
-/* --- Mobile Responsive --- */
 @media (max-width: 900px) {
   .solutionsWrapper {
-    padding: 40px 18px;
-  }
-
-  .card {
-    min-height: auto;
+    padding: 48px 18px;
   }
 }

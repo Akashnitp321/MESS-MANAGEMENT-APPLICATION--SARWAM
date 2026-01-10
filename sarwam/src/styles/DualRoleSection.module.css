@@ -1,110 +1,109 @@
 .section {
   width: 100%;
-  padding: 70px 0;
-  background: #0d0d0d;
-  color: white;
+  padding: clamp(56px, 7vw, 86px) 0;
+  background: transparent;
+  color: var(--text-primary);
 }
 
 .container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 32px;
+  gap: clamp(18px, 4vw, 34px);
   width: 92%;
-  max-width: 1200px;
+  max-width: 1180px;
   margin: 0 auto;
   flex-wrap: wrap;
 }
 
-/* Base card style */
 .card {
-  background: #111;
-  padding: 30px 25px;
-  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  padding: 26px 24px;
+  border-radius: var(--radius);
   flex: 1 1 400px;
   min-width: 280px;
   max-width: 500px;
-  border: 1px solid #1a1a1a;
-  box-shadow: 0 0 20px rgba(0, 225, 255, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid var(--border);
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  backdrop-filter: blur(10px);
 }
 
 .card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 0 25px rgba(0, 225, 255, 0.35);
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
 }
 
 .card h3 {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  color: #00e1ff;
-  margin-bottom: 25px;
+  color: var(--glow-blue);
+  margin-bottom: 18px;
 }
 
 .list {
   list-style: none;
   padding: 0;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .listItem {
-  font-size: 1rem;
-  color: #cccccc;
-  margin-bottom: 12px;
-  padding-left: 15px;
+  font-size: 0.98rem;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  padding-left: 14px;
   position: relative;
+  line-height: 1.5;
 }
 
 .listItem::before {
   content: "•";
-  color: #06ffb2;
+  color: var(--glow-green);
   position: absolute;
   left: 0;
   top: 0;
 }
 
-/* Buttons */
 .studentBtn, .contractorBtn {
-  padding: 12px 30px;
-  font-size: 16px;
-  border-radius: 8px;
+  padding: 12px 26px;
+  font-size: 15px;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
-  font-weight: 600;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-weight: 700;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.2s ease;
 }
 
 .studentBtn {
-  background: #06ffb2;
-  color: #000;
-  box-shadow: 0 4px 12px rgba(6, 255, 178, 0.4);
+  background: linear-gradient(135deg, var(--glow-green), #7df5d7);
+  color: #041022;
+  box-shadow: 0 12px 32px rgba(93, 224, 193, 0.25);
 }
 
 .studentBtn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(6, 255, 178, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 38px rgba(93, 224, 193, 0.35);
 }
 
 .contractorBtn {
-  background: #00e1ff;
-  color: #000;
-  box-shadow: 0 4px 12px rgba(0, 225, 255, 0.4);
+  background: linear-gradient(135deg, var(--glow-blue), #7cc8ff);
+  color: #041022;
+  box-shadow: 0 12px 32px rgba(77, 176, 246, 0.25);
 }
 
 .contractorBtn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 225, 255, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 38px rgba(77, 176, 246, 0.35);
 }
 
-/* Responsive */
 @media (max-width: 900px) {
   .container {
     flex-direction: column;
-    gap: 20px;
   }
 
   .card {
     width: 100%;
-    max-width: 720px;
+    max-width: 760px;
   }
 }

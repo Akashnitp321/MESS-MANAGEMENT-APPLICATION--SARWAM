@@ -1,61 +1,78 @@
 import React from "react";
-import styles from "../styles/hero.module.css";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "../styles/hero.module.css";
 
 export default function HeroSection() {
-    const navigate = useNavigate();
-
-
-  useEffect(() => {
-    
-    document.body.style.overflowX = "hidden";
-
-    // remove any margin/padding from body/html
-    document.documentElement.style.margin = "0";
-    document.documentElement.style.padding = "0";
-    document.body.style.margin = "0";
-    document.body.style.padding = "0";
-
-    // prevent components from going outside
-    document.documentElement.style.width = "100%";
-    document.body.style.width = "100%";
-
-    // cleanup when unmounts
-    return () => {
-      document.body.style.overflowX = "";
-      document.documentElement.style.margin = "";
-      document.documentElement.style.padding = "";
-      document.body.style.margin = "";
-      document.body.style.padding = "";
-      document.documentElement.style.width = "";
-      document.body.style.width = "";
-    };
-  }, []);
+  const navigate = useNavigate();
 
   return (
-    <div className={styles.hero}>
-      <div className={styles.left}>
-        <h1 className={styles.title}>SARWAM</h1>
-        <p className={styles.subtitle}>
-          Smart Mess Management System for Students & Contractors
-        </p>
+    <section className={styles.hero}>
+      <div className={styles.aurora}></div>
+      <div className={styles.auroraSoft}></div>
 
-        <div className={styles.buttonsRow}>
-          <button className={styles.studentBtn} onClick={() => navigate("/login")}>Login as Student</button>
-          <button className={styles.contractorBtn} onClick={() => navigate("/contractor-login")}>Login as Contractor</button>
+      <div className={styles.grid}>
+        <div className={styles.copy}> 
+          <span className={styles.tag}>Campus-ready • 2026</span>
+          <h1 className={styles.title}>
+            Modern mess management with a command-center experience.
+          </h1>
+          <p className={styles.subtitle}>
+            Automate check-ins, payments, and contractor ops in one clean interface. Built for fast mornings and zero admin drag.
+          </p>
+
+          <div className={styles.chips}>
+            <span className={styles.chip}>Live occupancy</span>
+            <span className={styles.chip}>Instant billing</span>
+            <span className={styles.chip}>Contractor insights</span>
+          </div>
+
+          <div className={styles.actions}>
+            <button className={styles.primary} onClick={() => navigate("/login")}>
+              Student login
+            </button>
+            <button className={styles.secondary} onClick={() => navigate("/contractor-login")}>
+              Contractor login
+            </button>
+          </div>
+          <button className={styles.linkBtn} onClick={() => navigate("/signup")}>New student? Create account</button>
         </div>
 
-        <button className={styles.exploreBtn}>Explore Features</button>
-      </div>
+        <div className={styles.panel}>
+          <div className={styles.card}>
+            <div className={styles.cardHeader}>
+              <div>
+                <p className={styles.cardLabel}>Live control</p>
+                <h3 className={styles.cardTitle}>Mess status</h3>
+              </div>
+              <span className={styles.pulse}>●</span>
+            </div>
 
-      <div className={styles.right}>
-        <img
-          src="/f.jpg"
-          alt="Sarwam Dashboard"
-          className={styles.heroImage}
-        />
+            <div className={styles.metrics}>
+              <div>
+                <p className={styles.metricLabel}>Meals served today</p>
+                <p className={styles.metricValue}>1,240</p>
+              </div>
+              <div>
+                <p className={styles.metricLabel}>On-time payments</p>
+                <p className={styles.metricValue}>98%</p>
+              </div>
+            </div>
+
+            <div className={styles.divider}></div>
+
+            <div className={styles.quickActions}>
+              <button className={styles.tile} onClick={() => navigate("/login")}>
+                Student portal
+                <span className={styles.arrow}>→</span>
+              </button>
+              <button className={styles.tile} onClick={() => navigate("/contractor-login")}>
+                Contractor portal
+                <span className={styles.arrow}>→</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

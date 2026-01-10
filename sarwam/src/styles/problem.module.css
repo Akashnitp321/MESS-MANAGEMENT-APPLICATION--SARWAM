@@ -1,64 +1,60 @@
 .section {
   width: 100%;
-  padding: 70px 0;
-  background: #0b0b0c;
-  color: white;
+  padding: clamp(56px, 7vw, 86px) 0;
+  background: transparent;
+  color: var(--text-primary);
   text-align: center;
 }
 
 .heading {
-  font-size: 2.8rem;
+  font-size: clamp(28px, 4vw, 42px);
   font-weight: 700;
-  color: #00e1ff;
-  margin-bottom: 40px;
+  color: var(--text-primary);
+  margin-bottom: 32px;
+  letter-spacing: 0.01em;
 }
 
-/* GRID same as solutions section */
 .grid {
   width: 92%;
-  max-width: 1200px;
+  max-width: 1180px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 24px;
+  gap: clamp(16px, 3vw, 26px);
 }
 
-/* CARD same as solution section */
 .card {
-  background: #111;
-  padding: 26px 20px;
-  border-radius: 18px;
-  transition: 0.3s ease;
-  box-shadow: 0 0 18px rgba(0, 225, 255, 0.24);
-  border: 1px solid #1a1a1a;
-
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  padding: 26px 22px;
+  border-radius: var(--radius);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid var(--border);
+  box-shadow: var(--card-shadow);
   display: flex;
   flex-direction: column;
   align-items: center;
+  backdrop-filter: blur(10px);
 }
 
-/* CARD hover */
 .card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 0 25px rgba(0, 225, 255, 0.5);
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
 }
 
-/* top icon */
 .iconMain {
-  width: 55px;
-  height: 55px;
-  margin-bottom: 18px;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 14px;
 }
 
-/* Title same color like solutions */
 .cardTitle {
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  color: #06ffb2;
-  margin-bottom: 18px;
+  color: var(--glow-green);
+  margin-bottom: 14px;
 }
 
-/* List */
 .list {
   padding: 0;
   margin: 0;
@@ -71,25 +67,19 @@
   align-items: flex-start;
   gap: 10px;
   margin-bottom: 12px;
-  color: #cccccc;
-  font-size: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.98rem;
+  line-height: 1.5;
 }
 
-/* green bullet like solution icons */
 .bullet {
-  width: 10px;
-  height: 10px;
-  background: #06ffb2;
+  width: 9px;
+  height: 9px;
+  background: var(--glow-green);
   border-radius: 50%;
-  margin-top: 5px;
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .grid { gap: 20px; }
+  margin-top: 6px;
 }
 
 @media (max-width: 768px) {
-  .section { padding: 56px 0; }
-  .heading { font-size: 2.2rem; }
+  .heading { margin-bottom: 26px; }
 }
