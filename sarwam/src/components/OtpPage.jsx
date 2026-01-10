@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import styles from "../styles/OTPPage.module.css";
+import styles from "../styles/OtpPage.module.css";
 
 export default function OTPPage() {
   const navigate = useNavigate();
